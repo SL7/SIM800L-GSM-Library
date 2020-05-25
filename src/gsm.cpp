@@ -1,9 +1,17 @@
 #include "gsm.h"
 
+<<<<<<< HEAD
 GSM::GSM(HardwareSerial * gsm_serial, HardwareSerial * console) {
     this->gsm = gsm_serial;
     this->terminal = Codes(console);
     this->term = console;
+=======
+GSM::GSM(HardwareSerial * gsm_serial, HardwareSerial * console, int test) {
+    this->gsm = gsm_serial;
+    this->terminal = Codes(console);
+    this->term = console;
+    this->test1 = test;
+>>>>>>> added  country code for SMS send function
 }
 
 
@@ -151,7 +159,11 @@ void GSM::sendSMS(String message, countrycode code, String number) {
         delay(100); 
         this->gsm->write(26);
         terminal.successln("Message Sent...");
+<<<<<<< HEAD
         //terminal.successln("Check you Phone");
+=======
+        terminal.successln("Check you Phone");
+>>>>>>> added  country code for SMS send function
         //TODO: Error message when the message is not send
 
     } else {

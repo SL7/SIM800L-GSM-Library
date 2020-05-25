@@ -37,13 +37,25 @@ private:
     Codes terminal;
     bool pin_set = false;
     pinmodes mode;
+<<<<<<< HEAD
     String cmnd_str(commands command);
 public:
     GSM();
     GSM(HardwareSerial * gsm_serial, HardwareSerial * console);
+=======
+    int test1;
+    String cmnd_str(commands command);
+public:
+    GSM();
+    GSM(HardwareSerial * gsm_serial, HardwareSerial * console, int test);
+>>>>>>> added  country code for SMS send function
     void initGSM(pinmodes modes);
     void setPIN(int pin = 0000);
 
     void sendSMS(String msg, countrycode code, String number);
     void at_test();
+<<<<<<< HEAD
+=======
+
+>>>>>>> added  country code for SMS send function
 };
