@@ -153,7 +153,7 @@ void GSM::sendSMS(String message, countrycode code, String number) {
         delay(100); 
         this->gsm->write(26);
         terminal.successln("Message Sent...");
-        terminal.successln("Check you Phone");
+        //terminal.successln("Check you Phone");
         //TODO: Error message when the message is not send
 
     } else {
