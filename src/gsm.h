@@ -21,6 +21,13 @@ enum pinmodes {
     PIN,
 };
 
+enum countrycode { 
+    DE,
+    US,
+    RU,
+    IT,
+};
+
 
 
 class GSM {
@@ -30,16 +37,13 @@ private:
     Codes terminal;
     bool pin_set = false;
     pinmodes mode;
-    int test1;
-    
+    String cmnd_str(commands command);
 public:
     GSM();
-    GSM(HardwareSerial * gsm_serial, HardwareSerial * console, int test);
-    String cmnd_str(commands command);
+    GSM(HardwareSerial * gsm_serial, HardwareSerial * console);
     void initGSM(pinmodes modes);
     void setPIN(int pin = 0000);
 
-    void sendSMS(String msg, String number);
+    void sendSMS(String msg, countrycode code, String number);
     void at_test();
-
 };

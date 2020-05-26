@@ -1,10 +1,9 @@
 #include "gsm.h"
 
-GSM::GSM(HardwareSerial * gsm_serial, HardwareSerial * console, int test) {
+GSM::GSM(HardwareSerial * gsm_serial, HardwareSerial * console) {
     this->gsm = gsm_serial;
     this->terminal = Codes(console);
     this->term = console;
-    this->test1 = test;
 }
 
 
@@ -52,9 +51,6 @@ void GSM::at_test() {
 }
 
 void GSM::initGSM(pinmodes modes) {
-    //this->gsm = gsm_serial;
-    //this->terminal = Codes(console);
-    //this->term = console;
     this->mode = modes;
     int counter = 0;
     delay(3000);
@@ -78,7 +74,6 @@ void GSM::initGSM(pinmodes modes) {
                 feedback += (char) gsm->read();
             }
             if (feedback.indexOf("OK") > 0) {
-                //terminal.println(feedback);
                 terminal.println();
                 terminal.successln("GSM Module initialized");
                 break;
@@ -113,7 +108,26 @@ void GSM::setPIN(int pin) {
     }
 }
 
-void GSM::sendSMS(String message, String number) {
+void GSM::sendSMS(String message, countrycode code, String number) {
+    String country;
+    switch (code) {
+        case DE:
+            country = "+49";
+            break;
+        case US:
+            country = "+01";
+            break;
+        case RU:
+            country = "+07";
+            break;
+        case IT:
+            country = "+39";
+            break;
+        default:
+            country = "+49";
+            break;
+    }
+
     if (this->pin_set) {
         this->gsm->println("AT+CMGF=1");
         //terminal.warningln(this->gsm->readString());
@@ -128,12 +142,16 @@ void GSM::sendSMS(String message, String number) {
             }   
         }
         else {
-            terminal.println("TEST");
+            terminal.errorln("GSM not responding.");
+            terminal.errorln("Check wiring or you are not connected");
         }
-        this->gsm->println(cmnd_str(SEND_SMS) + "=\"" + number + "\"");
+        this->gsm->println(cmnd_str(SEND_SMS) + "=\"" + country + number + "\"");
         delay(100);
-        this->gsm->println(message); delay(100); this->gsm->write(26);
-        //terminal.successln("Message send...");
+        this->gsm->println(message); 
+        delay(100); 
+        this->gsm->write(26);
+        terminal.successln("Message Sent...");
+        //terminal.successln("Check you Phone");
         //TODO: Error message when the message is not send
 
     } else {
