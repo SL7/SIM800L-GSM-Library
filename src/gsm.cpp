@@ -104,8 +104,17 @@ void GSM::setPIN(int pin) {
             terminal.configln("Setting Pin...");
 
             gsm->println(cmnd_str(SET_PIN) + "=\"" + String(pin) + "\"");
-            delay(1000);
-            terminal.successln("PIN set");
+            delay(300);
+            String out = "";
+            if (gsm->available() ) {
+                out = gsm->readString();
+            }
+            if (out.indexOf("OK") > 0) {
+                terminal.successln("Pin set");
+            } else {
+                terminal.errorln("Pin could not be set");
+            }
+            //terminal.successln("PIN set");
             break;
     }
 }
@@ -158,7 +167,7 @@ void GSM::sendSMS(String message, countrycode code, String number) {
 
     } else {
         terminal.println();
-        terminal.warningln("Set PIN before Sending messages");
+        terminal.warningln("Set PIN before sending messages");
     }
 }
 
