@@ -15,6 +15,9 @@ enum commands {
     START_TCPUDP,
     STOP_TCPUDP,
     LOCAL_IP,
+    LIST_SMS,
+    READ_SMS,
+    SMS_FORMAT,
 };
 
 enum pinmodes {

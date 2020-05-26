@@ -26,6 +26,10 @@ String GSM::cmnd_str(commands command) {
             return "AT+CIPCLOSE";
         case LOCAL_IP:
             return "AT+CIFSR";
+        case LIST_SMS:
+            return "AT+CMGL";
+        case SMS_FORMAT:
+            return "AT+CMGF";
         default:
             return "AT";
     }
@@ -67,11 +71,13 @@ void GSM::initGSM(pinmodes modes) {
     terminal.config("GSM Initializing");
     while(1) {
         gsm->println("AT");
-        //Serial.println(gsm->readString());
+        //delay(50);
+        //terminal.println(gsm->readString());
         if (gsm->available()) {
             String feedback; 
             while(gsm->available()) {
                 feedback += (char) gsm->read();
+                //terminal.println("test");
             }
             if (feedback.indexOf("OK") > 0) {
                 terminal.println();
@@ -170,6 +176,15 @@ void GSM::sendSMS(String message, countrycode code, String number) {
 }
 
 String GSM::rxSMS() {
-    
+    String out;
+    gsm->println(cmnd_str(SMS_FORMAT) + "=1");
+    delay(200);
+    gsm->println(cmnd_str(LIST_SMS) + "=\"REC UNREAD\",0");
+    delay(200);
+    while (gsm->available()) {
+        out = gsm->readString();
+    }
+    //terminal.println("test line");
+    return out;
 }
 
