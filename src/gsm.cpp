@@ -1,7 +1,5 @@
 #include "gsm.h"
 
-
-
 GSM::GSM(HardwareSerial * gsm_serial, HardwareSerial * console) {
     this->gsm = gsm_serial;
     this->terminal = Codes(console);
