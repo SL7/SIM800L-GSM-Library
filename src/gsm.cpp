@@ -112,7 +112,7 @@ void GSM::setPIN(int pin) {
             if (out.indexOf("OK") > 0) {
                 terminal.successln("Pin set");
             } else {
-                terminal.errorln("Pin could not be set");
+                terminal.errorln("Pin couldn't be set");
             }
             //terminal.successln("PIN set");
             break;
