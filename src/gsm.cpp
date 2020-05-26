@@ -169,3 +169,7 @@ void GSM::sendSMS(String message, countrycode code, String number) {
     }
 }
 
+String GSM::rxSMS() {
+    
+}
+
