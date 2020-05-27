@@ -55,4 +55,5 @@ public:
     String rxSMS(String number, countrycode code, int = 0);
     void at_test();
     void self_test();
+    String allSMS();
 };

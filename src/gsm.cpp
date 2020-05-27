@@ -243,4 +243,18 @@ String GSM::rxSMS(String number, countrycode code, int change_read_unread) {
 }
 
 
+String GSM::allSMS() {
+    String out;
+    gsm->println(cmnd_str(SMS_FORMAT) + "=1");
+    delay(200);
+    gsm->println(cmnd_str(LIST_SMS) + "=\"ALL\",1");
+    delay(200);
+    while(gsm->available()) {
+        out = gsm->readString();
+    }
+
+    return out;
+}
+
+
 
