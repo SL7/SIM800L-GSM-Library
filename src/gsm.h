@@ -18,6 +18,7 @@ enum commands {
     LIST_SMS,
     READ_SMS,
     SMS_FORMAT,
+    DELETE_SMS,
 };
 
 enum pinmodes {
@@ -42,14 +43,16 @@ private:
     bool pin_set = false;
     pinmodes mode;
     String cmnd_str(commands command);
+    
 public:
+    bool delete_SMS(int = 0);
     GSM();
     GSM(HardwareSerial * gsm_serial, HardwareSerial * console);
     void initGSM(pinmodes modes);
     void setPIN(int pin = 0000);
 
     void sendSMS(String msg, countrycode code, String number);
-    String rxSMS(String number, countrycode code);
+    String rxSMS(String number, countrycode code, int = 0);
     void at_test();
     void self_test();
 };

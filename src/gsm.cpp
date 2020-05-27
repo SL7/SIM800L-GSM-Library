@@ -30,9 +30,32 @@ String GSM::cmnd_str(commands command) {
             return "AT+CMGL";
         case SMS_FORMAT:
             return "AT+CMGF";
+        case DELETE_SMS:
+            return "AT+CMGD";
         default:
             return "AT";
     }
+}
+
+bool GSM::delete_SMS(int index) {
+    if (index == 0 ) {
+        for(uint16_t n = 1; n < 11; n++) {
+            gsm->println(cmnd_str(DELETE_SMS) + "=" + String(n) + ",0");
+            delay(200);
+        }
+        return true;
+    } else {
+        gsm->println(cmnd_str(DELETE_SMS) + "=" + String(index) + ",0");
+        delay(200);
+        if (gsm->available()) {
+            if (gsm->readString().indexOf("OK") > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    return false;
 }
 
 void GSM::at_test() {
@@ -181,8 +204,8 @@ void GSM::sendSMS(String message, countrycode code, String number) {
     }
 }
 
-// TODO: Stopped receiving messages
-String GSM::rxSMS(String number, countrycode code) {
+// FIXME: Stopped receiving messages
+String GSM::rxSMS(String number, countrycode code, int change_read_unread) {
     String out;
     String country;
 
@@ -206,15 +229,18 @@ String GSM::rxSMS(String number, countrycode code) {
 
     gsm->println(cmnd_str(SMS_FORMAT) + "=1");
     delay(200);
-    gsm->println(cmnd_str(LIST_SMS) + "=\"REC UNREAD\",1");
+    gsm->println(cmnd_str(LIST_SMS) + "=\"REC UNREAD\"," + String(change_read_unread));
     delay(200);
     while (gsm->available()) {
         out = gsm->readString();
     }
+    terminal.println(out);
     if (out.indexOf(country + number) > 0) {
         return out;
     } else {
-        return "No Message";
+        return "null";
     }
 }
+
+
 
