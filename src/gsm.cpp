@@ -204,7 +204,7 @@ void GSM::sendSMS(String message, countrycode code, String number) {
     }
 }
 
-// FIXME: Stopped receiving messages
+
 String GSM::rxSMS(String number, countrycode code, int change_read_unread) {
     String out;
     String country;
@@ -234,9 +234,9 @@ String GSM::rxSMS(String number, countrycode code, int change_read_unread) {
     while (gsm->available()) {
         out = gsm->readString();
     }
-    terminal.println(out);
+    //terminal.println(out);
     if (out.indexOf(country + number) > 0) {
-        return out;
+        return "[+] Message: " + out.substring(out.lastIndexOf('"') + 1, out.indexOf("OK") - 2);
     } else {
         return "null";
     }
