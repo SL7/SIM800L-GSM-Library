@@ -165,19 +165,15 @@ void GSM::sendSMS(String message, countrycode code, String number) {
         this->gsm->println(message); 
         delay(100); 
         this->gsm->write(26);
-
-        if (gsm->available()) {
+        if (this->gsm->available()) {
             String out = gsm->readString();
-            if (out.indexOf(message) > 0) {
+            if (out.indexOf(number) > 0) {
                 terminal.successln("Message Sent...");
-            } else {
-                terminal.errorln("Message couldn't be sent");
-                delay(200);
                 return;
+            } else {
+                terminal.errorln("Error sending the message");
             }
         }
-        //terminal.successln("Message Sent...");
-        //terminal.successln("Check you Phone");
 
     } else {
         terminal.println();
@@ -185,6 +181,7 @@ void GSM::sendSMS(String message, countrycode code, String number) {
     }
 }
 
+// TODO: Stopped receiving messages
 String GSM::rxSMS(String number, countrycode code) {
     String out;
     String country;
@@ -209,17 +206,15 @@ String GSM::rxSMS(String number, countrycode code) {
 
     gsm->println(cmnd_str(SMS_FORMAT) + "=1");
     delay(200);
-    gsm->println(cmnd_str(LIST_SMS) + "=\"REC UNREAD\",0");
+    gsm->println(cmnd_str(LIST_SMS) + "=\"REC UNREAD\",1");
     delay(200);
     while (gsm->available()) {
         out = gsm->readString();
     }
-    //terminal.println(out);
-    //TODO: Get the message ONLY from the specified number
     if (out.indexOf(country + number) > 0) {
-        return out;//.substring(out.lastIndexOf('"') + 1, out.indexOf("OK"));
+        return out;
     } else {
-        return "null";
+        return "No Message";
     }
 }
 
