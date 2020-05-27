@@ -190,7 +190,7 @@ void GSM::sendSMS(String message, countrycode code, String number) {
         this->gsm->write(26);
         if (this->gsm->available()) {
             String out = gsm->readString();
-            if (out.indexOf(number) > 0) {
+            if (out.indexOf(">") > 0) {
                 terminal.successln("Message Sent...");
                 return;
             } else {
