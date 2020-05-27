@@ -49,6 +49,6 @@ public:
     void setPIN(int pin = 0000);
 
     void sendSMS(String msg, countrycode code, String number);
-    String rxSMS();
+    String rxSMS(String number, countrycode code);
     void at_test();
 };

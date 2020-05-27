@@ -165,9 +165,19 @@ void GSM::sendSMS(String message, countrycode code, String number) {
         this->gsm->println(message); 
         delay(100); 
         this->gsm->write(26);
-        terminal.successln("Message Sent...");
+
+        if (gsm->available()) {
+            String out = gsm->readString();
+            if (out.indexOf(message) > 0) {
+                terminal.successln("Message Sent...");
+            } else {
+                terminal.errorln("Message couldn't be sent");
+                delay(200);
+                return;
+            }
+        }
+        //terminal.successln("Message Sent...");
         //terminal.successln("Check you Phone");
-        //TODO: Error message when the message is not send
 
     } else {
         terminal.println();
@@ -175,8 +185,28 @@ void GSM::sendSMS(String message, countrycode code, String number) {
     }
 }
 
-String GSM::rxSMS() {
+String GSM::rxSMS(String number, countrycode code) {
     String out;
+    String country;
+
+    switch (code) {
+        case DE:
+            country = "+49";
+            break;
+        case US:
+            country = "+01";
+            break;
+        case RU:
+            country = "+07";
+            break;
+        case IT:
+            country = "+39";
+            break;
+        default:
+            country = "+49";
+            break;
+    }
+
     gsm->println(cmnd_str(SMS_FORMAT) + "=1");
     delay(200);
     gsm->println(cmnd_str(LIST_SMS) + "=\"REC UNREAD\",0");
@@ -184,7 +214,11 @@ String GSM::rxSMS() {
     while (gsm->available()) {
         out = gsm->readString();
     }
-    //terminal.println("test line");
-    return out;
+    //TODO: Get the message ONLY from the number
+    if (out.indexOf(country + number) > 0) {
+        return out;
+    } else {
+        return "null";
+    }
 }
 
