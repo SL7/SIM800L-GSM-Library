@@ -214,9 +214,10 @@ String GSM::rxSMS(String number, countrycode code) {
     while (gsm->available()) {
         out = gsm->readString();
     }
-    //TODO: Get the message ONLY from the number
+    //terminal.println(out);
+    //TODO: Get the message ONLY from the specified number
     if (out.indexOf(country + number) > 0) {
-        return out;
+        return out;//.substring(out.lastIndexOf('"') + 1, out.indexOf("OK"));
     } else {
         return "null";
     }
