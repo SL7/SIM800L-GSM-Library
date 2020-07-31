@@ -48,7 +48,7 @@ public:
     bool delete_SMS(int = 0);
     GSM();
     GSM(HardwareSerial * gsm_serial, HardwareSerial * console);
-    void initGSM(pinmodes modes);
+    bool initGSM(pinmodes modes);
     void setPIN(int pin = 0000);
 
     void sendSMS(String msg, countrycode code, String number);

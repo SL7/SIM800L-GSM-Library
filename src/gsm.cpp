@@ -77,7 +77,7 @@ void GSM::at_test() {
     }
 }
 
-void GSM::initGSM(pinmodes modes) {
+bool GSM::initGSM(pinmodes modes) {
     this->mode = modes;
     int counter = 0;
     delay(3000);
@@ -105,14 +105,14 @@ void GSM::initGSM(pinmodes modes) {
             if (feedback.indexOf("OK") > 0) {
                 terminal.println();
                 terminal.successln("GSM Module initialized");
-                break;
+                return true;
             }   
             
         } else {
             terminal.print(".");
         }
         if (counter >= 120) {
-            break;
+            return false;
         }
         counter++;
         delay(1000);
